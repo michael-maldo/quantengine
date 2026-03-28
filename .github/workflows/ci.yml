@@ -1,0 +1,59 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: quantengine
+          POSTGRES_USER: qe_user
+          POSTGRES_PASSWORD: testpass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U qe_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: localhost
+      DB_NAME: quantengine
+      DB_USER: qe_user
+      DB_PASSWORD: testpass
+      DB_PORT: 5432
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install psycopg2-binary python-dotenv
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U qe_user; do
+            echo "Waiting for database..."
+            sleep 2
+          done
+
+      - name: Run schema
+        run: |
+          PGPASSWORD=testpass psql -h localhost -U qe_user -d quantengine -f db/schema.sql
+
+      - name: Run DB test
+        run: python test_db.py
