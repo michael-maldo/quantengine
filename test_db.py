@@ -7,7 +7,7 @@ cur = conn.cursor()
 cur.execute("""
 SELECT EXISTS (
     SELECT FROM information_schema.tables 
-    WHERE table_name = 'prices'
+    WHERE table_name = 'pricesX'
 );
 """)
 
