@@ -1,0 +1,35 @@
+name: Sync to GitLab
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with: 
+          fetch-depth: 0
+
+      # - name: Push to GitLab (secure)
+      #   env:
+      #     GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+      #   run: |
+      #     git remote remove gitlab || true
+      #     git remote add gitlab https://gitlab.tech-labs.dev/michael-maldo/quantengine.git
+
+      #     git config --global credential.helper store
+      #     echo "https://oauth2:${GITLAB_TOKEN}@gitlab.tech-labs.dev" > ~/.git-credentials
+
+      #     git push gitlab main
+
+
+      - name: Push to GitLab
+        run: |
+          git remote add gitlab https://${{secrets.GITLAB_USERNAME}}:${{secrets.GITLAB_TOKEN}}@gitlab.tech-labs.dev/michael-maldo/quantengine.git
+          git push gitlab main
