@@ -53,7 +53,7 @@ jobs:
 
       - name: Run schema
         run: |
-          PGPASSWORD=testpass psql -v ON_ERROR=1 -h localhost -U qe_user -d quantengine -f db/schema.sql
+          PGPASSWORD=testpass psql -v ON_ERROR_STOP=1 -h localhost -U qe_user -d quantengine -f db/schema.sql
 
       - name: Run DB test
         run: python test_db.py
