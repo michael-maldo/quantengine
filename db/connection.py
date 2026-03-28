@@ -7,7 +7,7 @@ def get_connection():
         host="localhost",
         database="quantengine",
         user="qe_user",
-        password="StrongPassword123",
+        password="testpass",
         port=5432,
         cursor_factory=RealDictCursor
     )
