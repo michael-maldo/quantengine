@@ -4,17 +4,21 @@ conn = get_connection()
 cur = conn.cursor()
 
 # Check table exists
-cur.execute("""
-SELECT EXISTS (
-    SELECT FROM information_schema.tables 
-    WHERE table_name = 'prices'
-);
-""")
+tables = ["symbols", "price", "features", "fundamentals"]
 
-result = cur.fetchone()
+for table in tables:
+    cur.execute(f"""
+    SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'prod'
+        AND table_name = '{table}'
+    );
+    """)
 
-if not result['exists']:
-    raise Exception("prices table does not exist")
+    result = cur.fetchone()
+
+    if not result['exists']:
+        raise Exception(f"{table} table does not exist")
 
 print("Schema OK")
 
