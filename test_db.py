@@ -4,7 +4,7 @@ conn = get_connection()
 cur = conn.cursor()
 
 # Check table exists
-tables = ["symbols", "price", "features", "fundamentals", "xxx"]
+tables = ["symbols", "price", "features", "fundamentals"]
 
 for table in tables:
     cur.execute(f"""
