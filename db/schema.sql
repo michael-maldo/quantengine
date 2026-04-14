@@ -1,3 +1,12 @@
+set search_path to prod,public;
+drop table if exists prices;
+drop table if exists features;
+drop table if exists fundamentals;
+drop table if exists symbols;
+drop schema if exists prod;
+-- drop database if exists quantengine;
+
+
 CREATE SCHEMA IF NOT EXISTS prod;
 
 CREATE TABLE IF NOT EXISTS prod.symbols (
@@ -10,7 +19,7 @@ CREATE TABLE IF NOT EXISTS prod.symbols (
     CONSTRAINT symbols_pkey PRIMARY KEY (symbol)
 );
 
-CREATE TABLE IF NOT EXISTS prod.price(
+CREATE TABLE IF NOT EXISTS prod.prices(
     date DATE NOT NULL,
     symbol TEXT NOT NULL,
     open DOUBLE PRECISION,
@@ -22,7 +31,7 @@ CREATE TABLE IF NOT EXISTS prod.price(
     FOREIGN KEY (symbol) REFERENCES prod.symbols(symbol)
 );
 
-CREATE INDEX idx_price_date ON prod.price(date);
+CREATE INDEX idx_prices_date ON prod.prices(date);
 
 CREATE TABLE IF NOT EXISTS prod.features (
     symbol TEXT NOT NULL,
